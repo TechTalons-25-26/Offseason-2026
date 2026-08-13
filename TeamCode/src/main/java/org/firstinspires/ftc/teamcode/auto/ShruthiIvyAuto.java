@@ -1,0 +1,83 @@
+package org.firstinspires.ftc.teamcode.auto; // make sure this aligns with class location
+
+import com.pedropathing.follower.Follower;
+import com.pedropathing.geometry.BezierCurve;
+import com.pedropathing.geometry.BezierLine;
+import com.pedropathing.geometry.Pose;
+import com.pedropathing.ivy.Command;
+import com.pedropathing.ivy.Scheduler;
+import com.pedropathing.paths.PathChain;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import static com.pedropathing.ivy.Scheduler.*;
+import static com.pedropathing.ivy.pedro.PedroCommands.*;
+import static com.pedropathing.ivy.groups.Groups.*;
+
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+
+@Autonomous(name = "Example Auto", group = "Examples")
+public class ShruthiIvyAuto extends LinearOpMode {
+
+    private Follower follower;
+
+    //defining our PathChains
+    private PathChain mainPath1, mainPath2;
+    public void buildPaths() {
+
+        mainPath1 = follower.pathBuilder()
+                .addPath(
+                        new BezierCurve(
+                                new Pose(56.000, 8.000),
+                                new Pose(52.183, 31.891),
+                                new Pose(35.209, 35.394)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(180))
+                .build();
+
+        mainPath2 = follower.pathBuilder()
+                .addPath(
+                        new BezierLine(
+                                new Pose(35.209, 35.394),
+                                new Pose(13.906, 35.896)
+                        )
+                )
+                .setTangentHeadingInterpolation()
+                .build();
+    }
+
+    public Command autoRoutine() {
+        return sequential(
+                follow(follower, mainPath1),
+                follow(follower, mainPath2, true)
+        );
+    }
+
+        @Override
+        public void runOpMode() {
+            //These will run when the OpMode is initiated
+            Scheduler.reset();
+            follower = Constants.createFollower(hardwareMap);
+            buildPaths();
+            follower.setStartingPose(new Pose(56.000, 8.000, Math.toRadians(90)));
+
+            waitForStart();
+            //We schedule all our commands when we start the OpMode
+            schedule(autoRoutine());
+            while (opModeIsActive()) {
+                //Update the follower and execute the scheduler every loop
+                follower.update();
+                Scheduler.execute();
+
+                // Feedback to Driver Hub for debugging
+                telemetry.addData("x", follower.getPose().getX());
+                telemetry.addData("y", follower.getPose().getY());
+                telemetry.addData("heading", follower.getPose().getHeading());
+                telemetry.update();
+            }
+        }
+
+
+
+}
