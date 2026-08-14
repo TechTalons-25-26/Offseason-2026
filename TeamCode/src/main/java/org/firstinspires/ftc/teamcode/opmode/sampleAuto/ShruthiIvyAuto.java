@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto; // make sure this aligns with class location
+package org.firstinspires.ftc.teamcode.opmode.sampleAuto; // make sure this aligns with class location
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierCurve;
@@ -14,7 +14,7 @@ import static com.pedropathing.ivy.Scheduler.*;
 import static com.pedropathing.ivy.pedro.PedroCommands.*;
 import static com.pedropathing.ivy.groups.Groups.*;
 
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+import org.firstinspires.ftc.teamcode.config.pedroPathing.Constants;
 
 @Autonomous(name = "Example Auto", group = "Examples")
 public class ShruthiIvyAuto extends LinearOpMode {
