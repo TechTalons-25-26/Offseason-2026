@@ -28,7 +28,8 @@ public class kanishkIvySampleAuto extends OpMode {
     public void start() {
         schedule(
                 sequential(
-                    peakLaziness(path.Path1)
+                    peakLaziness(path.Path1),
+                    peakLaziness(path.Path2)
                 )
         );
     }
@@ -58,7 +59,7 @@ public class kanishkIvySampleAuto extends OpMode {
 
                                     new Pose(56.000, 8.000)
                             )
-                    ).setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(130))
+                    ).setLinearHeadingInterpolation(Math.toRadians(130), Math.toRadians(90))
 
                     .build();
         }
