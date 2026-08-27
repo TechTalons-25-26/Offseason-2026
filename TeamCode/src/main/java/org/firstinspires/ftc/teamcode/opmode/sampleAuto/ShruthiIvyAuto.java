@@ -53,13 +53,14 @@ public class ShruthiIvyAuto extends LinearOpMode {
     }
     Command raiseArm = Command.build()
             .setExecute(() -> {
+                telemetry.addData("hiiih", "hihihi");
+                telemetry.update();
                 stage1.setPower(power);
-                power++;
+                power += 0.1;
             })
             .setDone(() -> Math.abs(stage1.getPower()) < 0.7)
             .setEnd(endCondition -> stage1.setPower(0))
             .requiring(stage1);
-
     public Command autoRoutine() {
         return sequential(
                 follow(follower, mainPath1),
