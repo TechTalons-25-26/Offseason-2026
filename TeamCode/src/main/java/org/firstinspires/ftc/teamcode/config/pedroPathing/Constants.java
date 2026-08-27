@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.config.pedroPathing;
 
-import com.pedropathing.control.FilteredPIDFCoefficients;
 import com.pedropathing.control.PIDFCoefficients;
+import com.pedropathing.control.PredictiveBrakingCoefficients;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.follower.FollowerConstants;
 import com.pedropathing.ftc.FollowerBuilder;
@@ -16,25 +16,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Constants {
     public static FollowerConstants followerConstants = new FollowerConstants()
-            .mass(6.3)
-            .forwardZeroPowerAcceleration(-33)
-            .lateralZeroPowerAcceleration(-56)
-            .translationalPIDFCoefficients(new PIDFCoefficients(0.075, 0, 0, 0))
-            .headingPIDFCoefficients(new PIDFCoefficients(1, 0, 0.02, 0.01))
-            .drivePIDFCoefficients(new FilteredPIDFCoefficients(0.0065, 0.0, 0.002, 0.6, 0.01))
-            .centripetalScaling(0.00042);
-
-
-    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 50, 5);
-    public static Object pinpoint;
-
-    public static Follower createFollower(HardwareMap hardwareMap) {
-        return new FollowerBuilder(followerConstants, hardwareMap)
-                .pinpointLocalizer(localizerConstants)
-                .pathConstraints(pathConstraints)
-                .mecanumDrivetrain(driveConstants)
-                .build();
-    }
+            .headingPIDFCoefficients(new PIDFCoefficients(1, 0, 0.04, 0.02)) // tuned constants
+            .predictiveBrakingCoefficients(new PredictiveBrakingCoefficients(0.1, 0.08, 0.001)) // (kP, kLinear, kQuadratic)
+            .centripetalScaling(0)
+            .mass(6.3);
 
     public static MecanumConstants driveConstants = new MecanumConstants()
             .maxPower(1)
@@ -46,9 +31,17 @@ public class Constants {
             .leftRearMotorDirection(DcMotorSimple.Direction.FORWARD)
             .rightFrontMotorDirection(DcMotorSimple.Direction.REVERSE)
             .rightRearMotorDirection(DcMotorSimple.Direction.REVERSE)
-            .xVelocity(78)
-            .yVelocity(65);
+            .xVelocity(72.539)
+            .yVelocity(0);
+    public static PathConstraints pathConstraints = new PathConstraints(0.99, 100, 1, 1);
 
+    public static Follower createFollower(HardwareMap hardwareMap) {
+        return new FollowerBuilder(followerConstants, hardwareMap)
+                .pinpointLocalizer(localizerConstants)
+                .pathConstraints(pathConstraints)
+                .mecanumDrivetrain(driveConstants)
+                .build();
+    }
 
     public static PinpointConstants localizerConstants = new PinpointConstants()
             .forwardPodY(0)
