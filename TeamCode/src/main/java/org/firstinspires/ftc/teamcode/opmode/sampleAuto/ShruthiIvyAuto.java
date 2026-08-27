@@ -9,6 +9,7 @@ import com.pedropathing.ivy.Scheduler;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import static com.pedropathing.ivy.Scheduler.*;
 import static com.pedropathing.ivy.pedro.PedroCommands.*;
@@ -16,13 +17,17 @@ import static com.pedropathing.ivy.groups.Groups.*;
 
 import org.firstinspires.ftc.teamcode.config.pedroPathing.Constants;
 
-@Autonomous(name = "Example Auto", group = "Examples")
+@Autonomous(name = "Shruthi Example Auto", group = "Examples")
 public class ShruthiIvyAuto extends LinearOpMode {
 
     private Follower follower;
 
     //defining our PathChains
     private PathChain mainPath1, mainPath2;
+
+    private DcMotor stage1;
+
+    double power = 0;
     public void buildPaths() {
 
         mainPath1 = follower.pathBuilder()
@@ -46,17 +51,29 @@ public class ShruthiIvyAuto extends LinearOpMode {
                 .setTangentHeadingInterpolation()
                 .build();
     }
+    Command raiseArm = Command.build()
+            .setExecute(() -> {
+                stage1.setPower(power);
+                power++;
+            })
+            .setDone(() -> Math.abs(stage1.getPower()) < 0.7)
+            .setEnd(endCondition -> stage1.setPower(0))
+            .requiring(stage1);
 
     public Command autoRoutine() {
         return sequential(
                 follow(follower, mainPath1),
-                follow(follower, mainPath2, true)
+                follow(follower, mainPath2, true),
+                raiseArm
         );
     }
 
         @Override
         public void runOpMode() {
             //These will run when the OpMode is initiated
+            stage1 = hardwareMap.get(DcMotor.class, "stage1");
+            stage1.setDirection(DcMotor.Direction.FORWARD);
+
             Scheduler.reset();
             follower = Constants.createFollower(hardwareMap);
             buildPaths();
