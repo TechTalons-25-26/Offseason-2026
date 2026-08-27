@@ -58,7 +58,7 @@ public class ShruthiIvyAuto extends LinearOpMode {
                 stage1.setPower(power);
                 power += 0.1;
             })
-            .setDone(() -> Math.abs(stage1.getPower()) < 0.7)
+            .setDone(() -> Math.abs(stage1.getPower()) > 0.8)
             .setEnd(endCondition -> stage1.setPower(0))
             .requiring(stage1);
     public Command autoRoutine() {
@@ -72,13 +72,13 @@ public class ShruthiIvyAuto extends LinearOpMode {
         @Override
         public void runOpMode() {
             //These will run when the OpMode is initiated
-            stage1 = hardwareMap.get(DcMotor.class, "stage1");
-            stage1.setDirection(DcMotor.Direction.FORWARD);
 
             Scheduler.reset();
             follower = Constants.createFollower(hardwareMap);
             buildPaths();
             follower.setStartingPose(new Pose(56.000, 8.000, Math.toRadians(90)));
+            stage1 = hardwareMap.get(DcMotor.class, "stage1");
+            stage1.setDirection(DcMotor.Direction.FORWARD);
 
             waitForStart();
             //We schedule all our commands when we start the OpMode
