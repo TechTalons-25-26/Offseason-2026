@@ -18,7 +18,7 @@ import com.qualcomm.robotcore.hardware.PIDCoefficients;
 
 import org.firstinspires.ftc.teamcode.config.pedroPathing.Constants;
 
-@Autonomous(name = "Shruthi Example Auto", group = "Examples")
+@Autonomous(name = "Shruthi Example Auto yipee", group = "Examples")
 public class ShruthiIvyAuto extends LinearOpMode {
 
     private Follower follower;
@@ -53,11 +53,19 @@ public class ShruthiIvyAuto extends LinearOpMode {
                 .build();
     }
     private Command raiseArm;
+
     public Command autoRoutine() {
-        return parallel(
-                follow(follower, mainPath1),
+        return sequential(
+                parallel(
+                        follow(follower, mainPath1),
+                        raiseArm
+                ),
+                parallel(
+                        follow(follower, mainPath2, true),
+                        raiseArm
+                )
                 //follow(follower, mainPath2, true),
-                raiseArm
+
         );
     }
 
