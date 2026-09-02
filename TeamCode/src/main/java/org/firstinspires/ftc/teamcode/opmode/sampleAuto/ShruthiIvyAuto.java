@@ -79,7 +79,7 @@ public class ShruthiIvyAuto extends LinearOpMode {
 
             raiseArm = Command.build()
                     .setExecute(() -> stage1.setPower(0.7))
-                    .setDone(() -> false)
+                    .setDone(() -> stage1.getCurrentPosition() >1000)
                     .setEnd(endCondition -> stage1.setPower(0))
                     .requiring(stage1);
 
