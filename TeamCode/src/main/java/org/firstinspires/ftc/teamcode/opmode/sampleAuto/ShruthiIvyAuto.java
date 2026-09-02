@@ -55,15 +55,12 @@ public class ShruthiIvyAuto extends LinearOpMode {
     private Command raiseArm;
 
     public Command autoRoutine() {
-        return sequential(
-                parallel(
+        return parallel(
+                sequential(
                         follow(follower, mainPath1),
-                        raiseArm
+                        follow(follower, mainPath2, true)
                 ),
-                parallel(
-                        follow(follower, mainPath2, true),
-                        raiseArm
-                )
+                raiseArm
                 //follow(follower, mainPath2, true),
 
         );
