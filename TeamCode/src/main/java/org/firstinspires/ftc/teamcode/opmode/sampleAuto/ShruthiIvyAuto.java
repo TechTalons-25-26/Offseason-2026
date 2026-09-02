@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import static com.pedropathing.ivy.Scheduler.*;
 import static com.pedropathing.ivy.pedro.PedroCommands.*;
 import static com.pedropathing.ivy.groups.Groups.*;
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
 
 import org.firstinspires.ftc.teamcode.config.pedroPathing.Constants;
 
@@ -51,16 +52,7 @@ public class ShruthiIvyAuto extends LinearOpMode {
                 .setTangentHeadingInterpolation()
                 .build();
     }
-    Command raiseArm = Command.build()
-            .setExecute(() -> {
-                telemetry.addData("hiiih", "hihihi");
-                telemetry.update();
-                stage1.setPower(power);
-                power += 0.1;
-            })
-            .setDone(() -> Math.abs(stage1.getPower()) > 0.8)
-            .setEnd(endCondition -> stage1.setPower(0))
-            .requiring(stage1);
+    private Command raiseArm;
     public Command autoRoutine() {
         return sequential(
                 follow(follower, mainPath1),
@@ -79,6 +71,12 @@ public class ShruthiIvyAuto extends LinearOpMode {
             follower.setStartingPose(new Pose(56.000, 8.000, Math.toRadians(90)));
             stage1 = hardwareMap.get(DcMotor.class, "stage1");
             stage1.setDirection(DcMotor.Direction.FORWARD);
+
+            raiseArm = Command.build()
+                    .setExecute(() -> stage1.setPower(0.7))
+                    .setDone(() -> false)
+                    .setEnd(endCondition -> stage1.setPower(0))
+                    .requiring(stage1);
 
             waitForStart();
             //We schedule all our commands when we start the OpMode
