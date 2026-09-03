@@ -90,11 +90,9 @@ public class smallBlueIvy extends LinearOpMode {
                     //follow(follower, mainPath2, true),
 
             ),
-                race(
-                    sequential(
-                            follow(follower, mainPath4)
-                    ),
-                    spin
+                sequential(
+                        follow(follower, mainPath4),
+                        spin
 
         )
 
