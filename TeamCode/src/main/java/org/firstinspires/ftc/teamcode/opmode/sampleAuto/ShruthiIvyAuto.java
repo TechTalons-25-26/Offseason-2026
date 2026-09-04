@@ -14,10 +14,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import static com.pedropathing.ivy.Scheduler.*;
 import static com.pedropathing.ivy.pedro.PedroCommands.*;
 import static com.pedropathing.ivy.groups.Groups.*;
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
 
 import org.firstinspires.ftc.teamcode.config.pedroPathing.Constants;
 
-@Autonomous(name = "Shruthi Example Auto", group = "Examples")
+@Autonomous(name = "Shruthi Example Auto yipee", group = "Examples")
 public class ShruthiIvyAuto extends LinearOpMode {
 
     private Follower follower;
@@ -51,33 +52,36 @@ public class ShruthiIvyAuto extends LinearOpMode {
                 .setTangentHeadingInterpolation()
                 .build();
     }
-    Command raiseArm = Command.build()
-            .setExecute(() -> {
-                stage1.setPower(power);
-                power++;
-            })
-            .setDone(() -> Math.abs(stage1.getPower()) < 0.7)
-            .setEnd(endCondition -> stage1.setPower(0))
-            .requiring(stage1);
+    private Command raiseArm;
 
     public Command autoRoutine() {
-        return sequential(
-                follow(follower, mainPath1),
-                follow(follower, mainPath2, true),
+        return parallel(
+                sequential(
+                        follow(follower, mainPath1),
+                        follow(follower, mainPath2, true)
+                ),
                 raiseArm
+                //follow(follower, mainPath2, true),
+
         );
     }
 
         @Override
         public void runOpMode() {
             //These will run when the OpMode is initiated
-            stage1 = hardwareMap.get(DcMotor.class, "stage1");
-            stage1.setDirection(DcMotor.Direction.FORWARD);
 
             Scheduler.reset();
             follower = Constants.createFollower(hardwareMap);
             buildPaths();
             follower.setStartingPose(new Pose(56.000, 8.000, Math.toRadians(90)));
+            stage1 = hardwareMap.get(DcMotor.class, "stage1");
+            stage1.setDirection(DcMotor.Direction.FORWARD);
+
+            raiseArm = Command.build()
+                    .setExecute(() -> stage1.setPower(0.7))
+                    .setDone(() -> stage1.getCurrentPosition() >1000)
+                    .setEnd(endCondition -> stage1.setPower(0))
+                    .requiring(stage1);
 
             waitForStart();
             //We schedule all our commands when we start the OpMode
