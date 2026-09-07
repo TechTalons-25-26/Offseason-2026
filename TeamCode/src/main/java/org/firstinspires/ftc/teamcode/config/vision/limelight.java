@@ -3,14 +3,19 @@ package org.firstinspires.ftc.teamcode.config.vision;
 import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-public class limelight extends OpMode {
+@TeleOp public class limelight extends OpMode {
 
     private Limelight3A limelight3A;
 
     @Override
     public void init() {
-        limelight3A = hardwareMap.get(limelight3A.getClass(), "limelight");
+        telemetry.setMsTransmissionInterval(11);
+
+        //added this cuz it was updating SO SLOW
+        limelight3A = hardwareMap.get(Limelight3A.class, "limelight");
+        limelight3A.setPollRateHz(100);
         limelight3A.pipelineSwitch(1);
     }
 

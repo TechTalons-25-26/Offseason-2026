@@ -80,7 +80,7 @@ public class smallBlueIvy extends LinearOpMode {
 
     public Command autoRoutine() {
         return sequential(
-                race(
+                deadline(
                     sequential(
                             follow(follower, mainPath1),
                             follow(follower, mainPath2, true),
