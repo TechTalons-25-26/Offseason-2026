@@ -20,13 +20,13 @@ import static com.pedropathing.ivy.groups.Groups.*;
 
 import org.firstinspires.ftc.teamcode.config.pedroPathing.Constants;
 
-@Autonomous(name = "small blue ivy", group = "Examples")
-public class smallBlueIvy extends LinearOpMode {
+@Autonomous(name = "neha biobuzz auto", group = "Examples")
+public class nehabiobuzzauto extends LinearOpMode {
 
     private Follower follower;
 
     //defining our PathChains
-    private PathChain mainPath1, mainPath2, mainPath3, mainPath4;
+    private PathChain mainPath1, mainPath2, mainPath3;
 
     private DcMotor stage1;
     private DcMotor outtake;
@@ -37,9 +37,9 @@ public class smallBlueIvy extends LinearOpMode {
         mainPath1 = follower.pathBuilder()
                 .addPath(
                         new BezierCurve(
-                                new Pose(56.000, 8.000),
-                                new Pose(56.162, 35.506),
-                                new Pose(45.268, 35.767)
+                                new Pose(80.962, 8.186),
+                                new Pose(80.570, 46.679),
+                                new Pose(105.538, 44.080)
                         )
                 )
                 .setTangentHeadingInterpolation()
@@ -47,57 +47,39 @@ public class smallBlueIvy extends LinearOpMode {
 
         mainPath2 = follower.pathBuilder()
                 .addPath(
-                        new BezierLine(
-                                new Pose(45.268, 35.767),
-
-                                new Pose(16.207, 35.953)
+                        new BezierCurve(
+                                new Pose(105.538, 44.080),
+                                new Pose(139.902, 41.915),
+                                new Pose(143.255, 95.565),
+                                new Pose(89.294, 63.426),
+                                new Pose(53.968, 81.633),
+                                new Pose(101.713, 111.959),
+                                new Pose(134.228, 98.330),
+                                new Pose(130.581, 91.163),
+                                new Pose(138.039, 139.343),
+                                new Pose(80.353, 125.940)
                         )
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
+                ).setTangentHeadingInterpolation()
                 .build();
         mainPath3 = follower.pathBuilder()
                 .addPath(
-                        new BezierLine(
-                                new Pose(16.207, 35.953),
-
-                                new Pose(45.226, 35.898)
-                        )
-                )
-                .setLinearHeadingInterpolation(Math.toRadians(180), Math.toRadians(180))
-                .build();
-
-        mainPath4 = follower.pathBuilder()
-                .addPath(
                         new BezierCurve(
-                                new Pose(45.226, 35.898),
-                                new Pose(71.753, 36.620),
-                                new Pose(64.909, 86.147),
-                                new Pose(31.863, 112.415)
+                                new Pose(80.353, 125.940),
+                                new Pose(63.276, 125.000),
+                                new Pose(74.789, 8.424)
                         )
-                )
-                .setTangentHeadingInterpolation()
+                ).setTangentHeadingInterpolation()
                 .build();
+
     }
     private Command raiseArm;
     private Command spin;
 
     public Command autoRoutine() {
         return sequential(
-                race(
-                    sequential(
-                            follow(follower, mainPath1),
-                            follow(follower, mainPath2, true),
-                            follow(follower, mainPath3, true)
-                    ),
-                    raiseArm
-                    //follow(follower, mainPath2, true),
-
-            ),
-                sequential(
-                        follow(follower, mainPath4),
-                        spin
-
-        )
+                follow(follower, mainPath1),
+                follow(follower, mainPath2, true),
+                follow(follower, mainPath3, true)
 
         );
 
